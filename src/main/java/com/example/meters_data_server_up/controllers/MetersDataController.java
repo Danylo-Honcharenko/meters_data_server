@@ -1,5 +1,6 @@
 package com.example.meters_data_server_up.controllers;
 
+import com.example.meters_data_server_up.Route;
 import com.example.meters_data_server_up.models.MetersDataModel;
 import com.example.meters_data_server_up.repositories.MetersDataRepositories;
 import com.example.meters_data_server_up.resources.MeterDataResources;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/meters-data")
+@RequestMapping(Route.MAIN)
 public class MetersDataController {
 
     private final MetersDataRepositories metersDataRepositories;
@@ -20,7 +21,7 @@ public class MetersDataController {
         this.metersDataRepositories = metersDataRepositories;
     }
 
-    @PostMapping("/create")
+    @PostMapping(Route.CREATE_ENTRY)
     public ResponseEntity<?> createEntry(@Valid @RequestBody MeterDataResources meterDataResources) {
 
         MetersDataModel metersDataModel = new MetersDataModel();
@@ -38,13 +39,13 @@ public class MetersDataController {
     }
 
     @CrossOrigin(maxAge = 3600)
-    @GetMapping("/all-records")
+    @GetMapping(Route.GET_ALL_RECORDS)
     public Iterable<MetersDataModel> getAllRecords() {
         return metersDataRepositories.findAll();
     }
 
     @CrossOrigin(maxAge = 3600)
-    @GetMapping("/reverse-record")
+    @GetMapping(Route.FILTER_RECORDS)
     public Iterable<MetersDataModel> getSpecificRecords() {
         return metersDataRepositories.findAll(Sort.by("id").descending());
     }

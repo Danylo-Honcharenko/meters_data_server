@@ -1,0 +1,12 @@
+---
+spring:
+  application:
+    name: meters_data
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: "jdbc:mariadb://${DB_IP_PORT_METERS:172.17.0.2:3306}/${DB_NAME_METERS:meters_data}"
+    username: "${DB_USER_METERS:meters_user}"
+    password: "${DB_PASSWORD_METERS:123456789}"
+  jpa:
+    hibernate:
+      ddl-auto: update
