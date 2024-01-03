@@ -1,52 +1,38 @@
 package com.example.meters_data_server_up.controllers;
 
-import com.example.meters_data_server_up.Route;
-import com.example.meters_data_server_up.models.MetersDataModel;
-import com.example.meters_data_server_up.repositories.MetersDataRepositories;
-import com.example.meters_data_server_up.resources.MeterDataResources;
-import com.example.meters_data_server_up.utilits.RespInfo;
+import com.example.meters_data_server_up.Routes;
+import com.example.meters_data_server_up.models.Data;
+import com.example.meters_data_server_up.repositories.MetersDataRepository;
+import com.example.meters_data_server_up.service.ResponseHandler;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(Route.MAIN)
+@RequestMapping(Routes.MAIN)
+@AllArgsConstructor
 public class MetersDataController {
 
-    private final MetersDataRepositories metersDataRepositories;
+    private final MetersDataRepository metersDataRepositories;
 
-    public MetersDataController(final MetersDataRepositories metersDataRepositories) {
-        this.metersDataRepositories = metersDataRepositories;
-    }
-
-    @PostMapping(Route.CREATE_ENTRY)
-    public ResponseEntity<?> createEntry(@Valid @RequestBody MeterDataResources meterDataResources) {
-
-        MetersDataModel metersDataModel = new MetersDataModel();
-        metersDataModel.setAnnotation(meterDataResources.annotation());
-        metersDataModel.setGas(meterDataResources.gas());
-        metersDataModel.setWater(meterDataResources.water());
-        metersDataModel.setT11(meterDataResources.t11());
-        metersDataModel.setT12(meterDataResources.t12());
-
-        metersDataRepositories.save(metersDataModel);
-
-        return new ResponseEntity<>(new RespInfo()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("Data written successfully!"), HttpStatus.CREATED);
+    @PostMapping(Routes.CREATE_ENTRY)
+    public ResponseEntity<?> createEntry(@Valid @RequestBody Data data) {
+        metersDataRepositories.save(data);
+        return ResponseHandler.response("Data written successfully!", HttpStatus.OK);
     }
 
     @CrossOrigin(maxAge = 3600)
-    @GetMapping(Route.GET_ALL_RECORDS)
-    public Iterable<MetersDataModel> getAllRecords() {
+    @GetMapping(Routes.GET_ALL_RECORDS)
+    public Iterable<Data> getAllRecords() {
         return metersDataRepositories.findAll();
     }
 
     @CrossOrigin(maxAge = 3600)
-    @GetMapping(Route.FILTER_RECORDS)
-    public Iterable<MetersDataModel> getSpecificRecords() {
+    @GetMapping(Routes.FILTER_RECORDS)
+    public Iterable<Data> getSpecificRecords() {
         return metersDataRepositories.findAll(Sort.by("id").descending());
     }
 }

@@ -3,15 +3,14 @@ package com.example.meters_data_server_up.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 
-@Data
+@lombok.Data
 @Entity
 @Table(name = "meters_data")
-public class MetersDataModel {
+public class Data {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
